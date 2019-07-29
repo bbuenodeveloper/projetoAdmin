@@ -8,6 +8,9 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 
+
+
+
 class RegisterController extends Controller
 {
     /*
@@ -63,11 +66,21 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+        //Pegando o nome original do arquivo
+        $nomeOriginal = $data['imagem']->getClientOriginalName();
+        //Montando a url necessara para acessar o arquivo corretamente
+        $caminhoimg = 'storage/img/' . $nomeOriginal;
+        //Salvando apenas a imagem
+        $save = $data['imagem']->storeAs('public/img', $nomeOriginal);
+        
+
+
         return User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
             'nivel_user'=> $data['nivel-user'],
+            'img'=> $caminhoimg,
             
         ]);
     }
